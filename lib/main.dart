@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'transaction_manager.dart';
+import 'screens/manufacturer_login.dart';
+import 'screens/manufacturer_SignUpPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,71 +10,52 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MedVerify DApp',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      title: 'MedVerify',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/manufacturer-login': (context) => ManufacturerLoginPage(),
+        '/manufacturer-signup': (context) => ManufacturerSignUpPage(),
+      },
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final TextEditingController _receiverController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
-  final TextEditingController _privateKeyController = TextEditingController();
-  
-  String rpcUrl = "http://127.0.0.1:7545"; // Replace with your RPC URL
-  String contractAddress = "YOUR_CONTRACT_ADDRESS"; // Replace with your contract address
-  late TransactionManager transactionManager;
-
-  @override
-  void initState() {
-    super.initState();
-    transactionManager = TransactionManager(rpcUrl, contractAddress);
-  }
-
-  void _initiateTransaction() async {
-    String receiver = _receiverController.text;
-    BigInt amount = BigInt.from(int.parse(_amountController.text));
-    String privateKey = _privateKeyController.text;
-
-    await transactionManager.initiateTransaction(receiver, amount, privateKey);
-    _receiverController.clear();
-    _amountController.clear();
-    _privateKeyController.clear();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Transaction initiated!')));
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('MedVerify DApp')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      appBar: AppBar(
+        title: Text('MedVerify Home'),
+      ),
+      body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: _receiverController,
-              decoration: InputDecoration(labelText: 'Receiver Address'),
-            ),
-            TextField(
-              controller: _amountController,
-              decoration: InputDecoration(labelText: 'Amount (in Wei)'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: _privateKeyController,
-              decoration: InputDecoration(labelText: 'Private Key'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _initiateTransaction,
-              child: Text('Initiate Transaction'),
+              onPressed: () {
+                // Navigate to manufacturer login
+                Navigator.pushNamed(context, '/manufacturer-login');
+              },
+              child: Text('Manufacturer Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Placeholder for User Login functionality
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('User Login Coming Soon!')),
+                );
+              },
+              child: Text('User Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Placeholder for Distributor Login functionality
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Distributor Login Coming Soon!')),
+                );
+              },
+              child: Text('Distributor Login'),
             ),
           ],
         ),
