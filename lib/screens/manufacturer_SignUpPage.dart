@@ -16,8 +16,7 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
 
   // Function to handle sign-up
   Future<void> signUp() async {
-    // Replace with your actual backend URL and endpoint
-    const backendUrl = 'http://127.0.0.1:5000/manufacturer/signup'; // Localhost example
+    const backendUrl = 'http://192.168.1.114:5000/manufacturer/signup'; // Your backend URL
 
     try {
       var response = await http.post(
@@ -69,6 +68,12 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
                       companyName = value;
                     });
                   },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your company name';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Manufacturer Name'),
@@ -76,6 +81,12 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
                     setState(() {
                       manufacturerName = value;
                     });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the manufacturer name';
+                    }
+                    return null;
                   },
                 ),
                 TextFormField(
@@ -85,6 +96,12 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
                       username = value;
                     });
                   },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your username';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Password'),
@@ -93,6 +110,12 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
                     setState(() {
                       password = value;
                     });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a password';
+                    }
+                    return null;
                   },
                 ),
                 SizedBox(height: 20),
