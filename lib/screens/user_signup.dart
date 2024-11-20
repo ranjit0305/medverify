@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ManufacturerSignUpPage extends StatefulWidget {
+class UserSignUpPage extends StatefulWidget {
   @override
-  _ManufacturerSignUpPageState createState() => _ManufacturerSignUpPageState();
+  _UserSignUpPageState createState() => _UserSignUpPageState();
 }
 
-class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
+class _UserSignUpPageState extends State<UserSignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  String companyName = '';
-  String manufacturerName = '';
-  String username = '';
+  String name = '';
+  String email = '';
   String password = '';
 
   // Function to handle sign-up
   Future<void> signUp() async {
-    const backendUrl = 'http://192.168.56.1:5000/manufacturer/signup';
+    const backendUrl = 'http://127.0.0.1:5000/register'; // Localhost example
 
     try {
       var response = await http.post(
@@ -25,9 +24,8 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
           'Content-Type': 'application/json',
         },
         body: json.encode({
-          'companyName': companyName,
-          'manufacturerName': manufacturerName,
-          'username': username,
+          'name': name,
+          'email': email,
           'password': password,
         }),
       );
@@ -38,7 +36,6 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
         );
         Navigator.pop(context); // Navigate back to login or another page
       } else {
-        // Handling backend message
         final errorMessage = json.decode(response.body)['message'] ?? 'Sign-Up Failed.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorMessage)),
@@ -54,7 +51,7 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Manufacturer Sign-Up')),
+      appBar: AppBar(title: Text('User Sign-Up')),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -63,45 +60,19 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
             child: Column(
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Company Name'),
+                  decoration: InputDecoration(labelText: 'Name'),
                   onChanged: (value) {
                     setState(() {
-                      companyName = value;
+                      name = value;
                     });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter company name';
-                    }
-                    return null;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Manufacturer Name'),
+                  decoration: InputDecoration(labelText: 'Email'),
                   onChanged: (value) {
                     setState(() {
-                      manufacturerName = value;
+                      email = value;
                     });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter manufacturer name';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Username'),
-                  onChanged: (value) {
-                    setState(() {
-                      username = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter username';
-                    }
-                    return null;
                   },
                 ),
                 TextFormField(
@@ -111,12 +82,6 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
                     setState(() {
                       password = value;
                     });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter password';
-                    }
-                    return null;
                   },
                 ),
                 SizedBox(height: 20),

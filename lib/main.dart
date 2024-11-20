@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'screens/manufacturer_login.dart';
 import 'screens/manufacturer_SignUpPage.dart';
+import 'screens/user_login.dart';
+import 'screens/user_signup.dart';
+import 'screens/distributor_login.dart';
+import 'screens/distributor_signup.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,6 +20,10 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomePage(),
         '/manufacturer-login': (context) => ManufacturerLoginPage(),
         '/manufacturer-signup': (context) => ManufacturerSignUpPage(),
+        '/user-login': (context) => UserLoginPage(),
+        '/user-signup': (context) => UserSignUpPage(),
+        '/distributor-login': (context) => DistributorLoginPage(),
+        '/distributor-signup': (context) => DistributorSignUpPage(),
       },
     );
   }
@@ -41,19 +49,15 @@ class HomePage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // Placeholder for User Login functionality
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('User Login Coming Soon!')),
-                );
+                // Navigate to user login
+                Navigator.pushNamed(context, '/user-login');
               },
               child: Text('User Login'),
             ),
             ElevatedButton(
               onPressed: () {
-                // Placeholder for Distributor Login functionality
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Distributor Login Coming Soon!')),
-                );
+                // Navigate to distributor login
+                Navigator.pushNamed(context, '/distributor-login');
               },
               child: Text('Distributor Login'),
             ),

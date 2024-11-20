@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ManufacturerSignUpPage extends StatefulWidget {
+class DistributorSignUpPage extends StatefulWidget {
   @override
-  _ManufacturerSignUpPageState createState() => _ManufacturerSignUpPageState();
+  _DistributorSignUpPageState createState() => _DistributorSignUpPageState();
 }
 
-class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
+class _DistributorSignUpPageState extends State<DistributorSignUpPage> {
   final _formKey = GlobalKey<FormState>();
   String companyName = '';
-  String manufacturerName = '';
+  String distributorName = '';
   String username = '';
   String password = '';
 
   // Function to handle sign-up
   Future<void> signUp() async {
-    const backendUrl = 'http://192.168.56.1:5000/manufacturer/signup';
+    const backendUrl = 'http://127.0.0.1:5000/api/distributors/register'; // Match the backend route
 
     try {
       var response = await http.post(
@@ -26,7 +26,7 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
         },
         body: json.encode({
           'companyName': companyName,
-          'manufacturerName': manufacturerName,
+          'distributorName': distributorName,
           'username': username,
           'password': password,
         }),
@@ -38,7 +38,6 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
         );
         Navigator.pop(context); // Navigate back to login or another page
       } else {
-        // Handling backend message
         final errorMessage = json.decode(response.body)['message'] ?? 'Sign-Up Failed.';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorMessage)),
@@ -54,7 +53,7 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Manufacturer Sign-Up')),
+      appBar: AppBar(title: Text('Distributor Sign-Up')),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -69,25 +68,13 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
                       companyName = value;
                     });
                   },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter company name';
-                    }
-                    return null;
-                  },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Manufacturer Name'),
+                  decoration: InputDecoration(labelText: 'Distributor Name'),
                   onChanged: (value) {
                     setState(() {
-                      manufacturerName = value;
+                      distributorName = value;
                     });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter manufacturer name';
-                    }
-                    return null;
                   },
                 ),
                 TextFormField(
@@ -97,12 +84,6 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
                       username = value;
                     });
                   },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter username';
-                    }
-                    return null;
-                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Password'),
@@ -111,12 +92,6 @@ class _ManufacturerSignUpPageState extends State<ManufacturerSignUpPage> {
                     setState(() {
                       password = value;
                     });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter password';
-                    }
-                    return null;
                   },
                 ),
                 SizedBox(height: 20),

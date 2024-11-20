@@ -1,19 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class DistributorLoginPage extends StatelessWidget {
-  final TextEditingController _medicineNameController = TextEditingController();
-  final TextEditingController _batchIdController = TextEditingController();
-  final TextEditingController _retailerController = TextEditingController();
+class DistributorLoginPage extends StatefulWidget {
+  @override
+  _DistributorLoginPageState createState() => _DistributorLoginPageState();
+}
 
-  void _submitDetails() {
-    // Logic to update details on the blockchain
-    // You can replace this with your blockchain interaction code.
-    print("Medicine Name: ${_medicineNameController.text}");
-    print("Batch ID: ${_batchIdController.text}");
-    print("Retailer Address: ${_retailerController.text}");
-    _medicineNameController.clear();
-    _batchIdController.clear();
-    _retailerController.clear();
+class _DistributorLoginPageState extends State<DistributorLoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  String username = '';
+  String password = '';
+
+  // Function to handle login
+  Future<void> login() async {
+    var response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/distributor/login'), // Replace with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'username': username,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login Successful!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid username or password.')),
+      );
+    }
   }
 
   @override
@@ -21,28 +41,44 @@ class DistributorLoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Distributor Login')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _medicineNameController,
-              decoration: InputDecoration(labelText: 'Medicine Name'),
-            ),
-            TextField(
-              controller: _batchIdController,
-              decoration: InputDecoration(labelText: 'Batch ID'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: _retailerController,
-              decoration: InputDecoration(labelText: 'Retailer Address'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _submitDetails,
-              child: Text('Submit Details'),
-            ),
-          ],
+        padding: EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Username'),
+                onChanged: (value) {
+                  setState(() {
+                    username = value;
+                  });
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                onChanged: (value) {
+                  setState(() {
+                    password = value;
+                  });
+                },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    login();
+                  }
+                },
+                child: Text('Login'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/distributor-signup');
+                },
+                child: Text('Don\'t have an account? Sign Up'),
+              ),
+            ],
+          ),
         ),
       ),
     );

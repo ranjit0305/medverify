@@ -6,10 +6,12 @@ class ManufacturerLoginPage extends StatefulWidget {
   @override
   _ManufacturerLoginPageState createState() => _ManufacturerLoginPageState();
 }
+
 class _ManufacturerLoginPageState extends State<ManufacturerLoginPage> {
   final _formKey = GlobalKey<FormState>();
   String username = '';
   String password = '';
+
   // Function to handle login
   Future<void> login() async {
     var response = await http.post(
@@ -22,6 +24,7 @@ class _ManufacturerLoginPageState extends State<ManufacturerLoginPage> {
         'password': password,
       }),
     );
+
     if (response.statusCode == 200) {
       // Login successful
       ScaffoldMessenger.of(context).showSnackBar(
